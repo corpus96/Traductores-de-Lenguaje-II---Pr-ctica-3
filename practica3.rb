@@ -13,7 +13,11 @@
 
 #[Variables Globales]
 
-$CADENA = 0 #Valor que recibirá el programa para validar, se ingresará al ASD
+#libs
+require 'io/console'
+
+$CADENA = String.new #Valor que recibirá el programa para validar, se ingresará al ASD
+$GLOBFLAG = false #Variable de control para el programa
 
 def menu()
   exitFlag = false
@@ -41,7 +45,12 @@ def menu()
     elsif Integer(menuOption) == 2
       #Convertir la bandera de salida a verdadero, de esta forma, saliendo del
       #programa
+      print "Saliendo del programa..."
+      gets
       exitFlag = true
+    else
+      puts "Esa opcion no esta disponible en el menu"
+      gets
     end
 
   end #while(!exitFlag)
@@ -53,10 +62,10 @@ def ASD()
   #Descendente
 
   print "Ingresa una cadena => "
-  cadena = gets
+  $CADENA = gets
 
-  if cadena = "" or cadena " "
-    puts "Cadena aceptada"
+  if $CADENA.length == 1
+    print "Cadena aceptada"
     gets
   else
     expr()
@@ -64,7 +73,28 @@ def ASD()
 end
 
 def expr()
+  contador = $CADENA.length
+  c = 0
+  $GLOBFLAG = true
 
+  #Recorrer cada caracter de la cadena
+
+  while < contador
+    c = term()
+    c = resto()
+
+    unless c.nil?
+      if c >= contador or c.nil?
+        break
+      end
+    else
+      break
+    end
+  end
+
+  if $GLOBFLAG
+    puts "Cadena aceptada"
+  end
 end
 
 #El programa empezará aqui
