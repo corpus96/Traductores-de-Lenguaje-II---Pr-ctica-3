@@ -18,6 +18,7 @@ require 'io/console'
 
 $CADENA = String.new #Valor que recibirá el programa para validar, se ingresará al ASD
 $GLOBFLAG = false #Variable de control para el programa
+$C = Integer.new #Variable que contará caracter por caracter
 
 def menu()
   exitFlag = false
@@ -27,7 +28,7 @@ def menu()
     system "cls"
     finalString = ""
     turns = 0
-    c = 0
+    $C = 0
 
     #Menú del programa
     puts "\t ------------------------------------"
@@ -36,6 +37,7 @@ def menu()
     puts "(1) Ingresar cadena"
     puts "(2) Salir del programa"
     print "Ingresar opcion: "
+    STDOUT.flush
 
     menuOption = gets
 
@@ -46,6 +48,7 @@ def menu()
       #Convertir la bandera de salida a verdadero, de esta forma, saliendo del
       #programa
       print "Saliendo del programa..."
+      STDOUT.flush
       gets
       exitFlag = true
     else
@@ -62,10 +65,12 @@ def ASD()
   #Descendente
 
   print "Ingresa una cadena => "
+  STDOUT.flush
   $CADENA = gets
 
-  if $CADENA.length == 1
+  if $CADENA.length == 1 or $CADENA.length == 0
     print "Cadena aceptada"
+    STDOUT.flush
     gets
   else
     expr()
@@ -74,14 +79,13 @@ end
 
 def expr()
   contador = $CADENA.length
-  c = 0
   $GLOBFLAG = true
 
   #Recorrer cada caracter de la cadena
 
   while < contador
-    c = term()
-    c = resto()
+    $C = term()
+    $C = resto()
 
     unless c.nil?
       if c >= contador or c.nil?
@@ -96,6 +100,17 @@ def expr()
     puts "Cadena aceptada"
   end
 end
+
+def term()
+  arrPos = $C
+
+  if $CADENA.index(arrPos) =~ /\d/
+    t = $CADENA.index(arrPos)
+    arrPos = coincidir()
+    print t
+    STDOUT.flush
+end
+
 
 #El programa empezará aqui
 menu()
