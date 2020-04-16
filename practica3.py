@@ -2,7 +2,7 @@
 #Realizado por Emmanuel Corpus
 #Asignatura: Traductores de Lenguaje II
 
-#Espeificaciones
+#Especificaciones
 # => tomar el lenguaje hecho en la práctica 2 y hacer un Analizador sintáctico descendente recursivo que reconozca ese lenguaje.
 
 #Documentación
@@ -23,6 +23,62 @@ _VUELTAS = 0
 _C = 0
 _CADENA = ""
 _CONTADOR = 0
+
+#Palabaras reservadas
+reserved = [
+ 
+    "begin",
+    "end",
+    "entero",
+    "real",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T,"
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "if",
+    "else",
+    "while",
+    "endwhile"
+]
+
+#Reglas de expresiones regulares (Lógicas)
+MENORQUE = r'<'
+MAYORQUE = r'>'
+IGUAL = r'='
+MENORIGUALQUE = r'<='
+MAYORIGUALQUE = r'=>'
+DIFERENTEQUE = r'<>'
+PARIZQ = r'('
+PARDER = r')'
+COMA = r','
+PUNTOYCOMA = r';'
+PUNTO = r'.'
+SUM = r'+'
+SUB = r'-'
+MUL = r'*'
+DIV = r'/'
 
 def menu():
     global vueltas
@@ -51,17 +107,27 @@ def menu():
             print("Esta opcion no esta disponible en el menu")
 
         input("\nPresione cualquier tecla para continuar")
+
+'''
+**********************************************************************************
+**********************************************************************************
+'''        
                         
 def ASDR():
     global _CADENA
 
-    _CADENA = input("Ingresar la cadena: ")
+    _CADENA = readFile()
 
-    if _CADENA == "" or _CADENA == " ":
+    if _CADENA == "":
         print("\n\033[32m" + "Cadena aceptada")
         print("\033[39m")
     else:
         expr()
+
+'''
+**********************************************************************************
+**********************************************************************************
+'''        
 
 def expr():
     global _GLOBFLAG
@@ -77,24 +143,33 @@ def expr():
         _C = term()
         _C = resto()
 
+        '''
         if _C != None:
             if _C >= _CONTADOR or _C == None:
                 break
         else:
             break
+        '''
 
     if _GLOBFLAG:
         print("\n\033[32m" + "Cadena aceptada")    
         print("\033[39m")
+
+'''
+**********************************************************************************
+**********************************************************************************
+'''        
 
 def term():
     global _GLOBFLAG
     global _C
     global _CADENA
 
+    filePath = "source.txt"
+
     if _CADENA[_C].isdigit():
         t = _CADENA[_C]
-        _C = coincidir()
+        _C = coincidir(_CADENA[_C])
 
         print(t, end='')
     else:
@@ -106,6 +181,11 @@ def term():
         exit()
 
     return _C  
+
+'''
+**********************************************************************************
+**********************************************************************************
+'''        
 
 def coincidir(oper):
     global _GLOBFLAG
@@ -128,7 +208,12 @@ def coincidir(oper):
 
         exit()
 
-    return res      
+    return res 
+
+'''
+**********************************************************************************
+**********************************************************************************
+'''             
 
 def resto():
     global _GLOBFLAG
@@ -162,4 +247,23 @@ def resto():
 
             exit()
 
-menu()            
+'''
+**********************************************************************************
+**********************************************************************************
+'''   
+
+#Read content of source.txt and save it into variable
+def readFile():
+    f = open("source.txt", 'r')
+
+    if f.mode == 'r':
+        contents = f.read()
+
+        print(contents)
+
+    f.close()
+
+    return contents
+
+#menu()            
+readFile()
