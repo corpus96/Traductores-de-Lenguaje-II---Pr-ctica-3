@@ -23,6 +23,7 @@ _VUELTAS = 0
 _C = 0
 _CADENA = ""
 _CONTADOR = 0
+_FILEPATH = "source.txt"
 
 #Palabaras reservadas
 reserved = [
@@ -81,15 +82,13 @@ MUL = r'*'
 DIV = r'/'
 
 def menu():
-    global vueltas
-
     exitFlag = False
 
     while not exitFlag:
         os.system("cls")
         finalString = ""
-        _VUELTAS = 0
-        _C = 0
+        #_VUELTAS = 0
+        #_C = 0
 
         print("\t ----------------------------------------------")
         print("\t|   ANALIZADOR SINTACTICO DECENDENTE RECURSIVO |")
@@ -164,21 +163,30 @@ def term():
     global _GLOBFLAG
     global _C
     global _CADENA
+    global _FILEPATH
 
-    filePath = "source.txt"
+    with open(_FILEPATH) as fp:
 
-    if _CADENA[_C].isdigit():
-        t = _CADENA[_C]
-        _C = coincidir(_CADENA[_C])
+        line = fp.readline()
 
-        print(t, end='')
-    else:
-        print("\033[31m" + "\nERROR DE SINTAXIS")
-        print("\033[39m")
+        while line:
+            #if _CADENA[_C].isdigit():
+            if is_in_reserved(line):
+                #t = _CADENA[_C]
+                t = line
+                #_C = coincidir(_CADENA[_C])
+                _C = coincidir(line)
 
-        _GLOBFLAG = False
+                print(t, end='')
+            else:
+                print("\033[31m" + "\nERROR DE SINTAXIS")
+                print("\033[39m")
 
-        exit()
+                _GLOBFLAG = False
+
+                exit()
+
+            line = fp.readline()
 
     return _C  
 
@@ -192,13 +200,20 @@ def coincidir(oper):
     global _CADENA
     global _C
 
-    line = "0123456789+-"
     f = False
 
-    for l in line:
-        if oper == l:
-            res = _C + len(_CADENA[_C])
-            f = True
+    with open(_FILEPATH) as fp:
+
+        line = fp.read()
+
+        while line:
+            #if line.find(oper):
+            if any(line in s for s in reserved):
+                #res = _C + len(_CADENA[_C])
+                res = _C + len(line)
+                f = True
+
+            line = fp.read()
 
     if not f:
         print("\033[31m" + "\nSimbolo no reconocido(1)")
@@ -264,6 +279,24 @@ def readFile():
     f.close()
 
     return contents
+
+'''
+**********************************************************************************
+**********************************************************************************
+'''   
+
+def is_in_reserved(line):
+    #Check if current line is in served
+    global reserved
+    
+    f = False
+    line_split = line.split()
+
+    for l in line_split:
+        if l in reserved:
+            f = True
+
+    return f
 
 #menu()            
 readFile()
